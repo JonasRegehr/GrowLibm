@@ -202,12 +202,10 @@
     (replace-vars varDict impl)))
 
 (define (to-fpcore-str cand)
-  (define expr (candidate-spec cand))
-  (define (binary64-impl expr)
-    (define spec (prog->spec expr))
-    (fpcore->prog spec (get-ctx spec)))
-  (define impl (binary64-impl expr))
-  (format "(FPCore ~a ~a)" (free-variables impl) (prog->fpcore impl (get-ctx impl))))
+    (define expr (candidate-spec cand))
+    (define vars (free-variables expr))
+    (format "(FPCore ~a ~a)" vars (prog->fpcore expr (candidate-ctx cand))))
+
 (define (candidate-expr? expr)
   (and (not (or (symbol? expr) (literal? expr) (number? expr)))
        (has-some-free-vars? expr)
